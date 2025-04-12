@@ -17,20 +17,25 @@ python -m pip install -e .
 ## `SeaPath` module
 The SeaPath module calculates the Manhattan distance between given source coordinates and target coordinates, ensuring the path only traverses water areas by recognizing the polygon(s) provided from a .shp file.
 
+Example code:
+ 
 ```python
 from seakrige import SeaPath
 
 # initialize the SeaPath instance
-sea_path = SeaPath(shapefile = "XXX.shp", # path to the shapefile
-                   resolution = 0.1, # resolution of the grid
-                   grid_shape = "square", # shape of the grid, either "triangle" or "square"
-                   w_method = "queen",# method for creating the weights, "queen", "rook", or "knn"
-                   k = 8,) #number of nearest neighbors for the "knn" weight method. Only used if w_method is "knn"
+sea_path = SeaPath(
+    shapefile="./tw_shp/tw.shp",  # path to the shapefile
+    resolution=0.05,  # resolution of the grid
+    grid_shape="square",  # shape of the grid, either "triangle" or "square"
+    w_method="queen",  # method for creating the weights, "queen", "rook", or "knn"
+    k=8, # number of nearest neighbors for the "knn" weight method. Only used if w_method is "knn"
+)
+
 ```
 
 ```python
-pos1 = (longitude1, latitude1)
-pos2 = (longitude2, latitude2)
+pos1 = (120.268875, 24.283269)
+pos2 = (121.636672, 23.580348)
 # calculate the shortest path (manhattan distance), then convert to geographical distance
 sea_path.calc_path_from_G(source_coord = pos1, target_coord = pos2)
 # plot geographical map
@@ -40,6 +45,8 @@ sea_path.plot_G(node_size = 1, edge_size = 0.5)
 # plot shortest sea path
 sea_path.plot_path(path_color = 'r', width = 2)
 ```
+
+<img src="https://github.com/ShawnChen09/seakrige/raw/main/img/seapath.png" width="300"/>
 
 ## `SeaKrige` module
 The SeaKrige module performs the interpolation of z-values at unsampled sites based on spatial autocorrelation (using the distance calculated by SeaPath) and visualizes the results.
