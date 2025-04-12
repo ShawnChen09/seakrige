@@ -18,7 +18,7 @@ python -m pip install -e .
 The SeaPath module calculates the Manhattan distance between given source coordinates and target coordinates, ensuring the path only traverses water areas by recognizing the polygon(s) provided from a .shp file.
 
 Example code:
- 
+
 ```python
 from seakrige import SeaPath
 
@@ -51,6 +51,8 @@ sea_path.plot_path(path_color = 'r', width = 2)
 ## `SeaKrige` module
 The SeaKrige module performs the interpolation of z-values at unsampled sites based on spatial autocorrelation (using the distance calculated by SeaPath) and visualizes the results.
 
+Example code:
+
 ```python
 import numpy as np
 from seakrige import SeaKrige
@@ -62,7 +64,37 @@ known_points = np.column_stack((longitude, latitude)) # array_like (Nx2)
 shapefile = "XXX.shp"
 
 # initialize the instance
-sea_krige = SeaKrige(known_points, counts, shapefile, resolution=0.1)
+sea_krige = SeaKrige(
+    known_points,
+    z_values,
+    shapefile,
+    resolution=0.1,
+    grid_shape="square",
+    w_method="queen",
+    k=8,
+)
+```
+
+```python
+sea_krige.plot_scatter(
+    # All parameters are optional
+    colormap=COLORMAP,
+    zoom=ZOOM-RATIO,
+    range_color=[Vmin, Vmax],
+    center={"lat": LAT, "lon": LON},
+    title=TITLE,
+    marker_size=SIZE,
+    marker_opacity=OPACITY,
+    layout_margin= {"r": R, "t": T, "l": L, "b": B},
+    layout_width=WIDTH,
+    layout_height=HEIGHT,
+    html_path=HTMLPATH,
+    show_fig=True,
+)
+```
+
+```python
+sea_krige.predict()
 ```
 
 ```python
@@ -72,5 +104,5 @@ sea_krige.plot_fit_variogram()
 
 ```python
 # plot interpolation results on a geographical map
-sea_krige.plot_predict_result()
+sea_krige.plot_predict_result(title=TITLE, vmin=VMIN, vmax=VMAX)
 ```
